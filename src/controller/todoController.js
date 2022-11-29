@@ -1,6 +1,7 @@
 const TODO = require("../model/todoModel");
 const USER = require("../model/userModel");
 
+// creating new todo
 const addTodo = async (req, res) => {
   const todo = req.body.todo;
   if (!todo) {
@@ -17,6 +18,7 @@ const addTodo = async (req, res) => {
   }
 };
 
+// getting todo
 const getTodo = async (req, res) => {
   try {
     // req.user.id comes from jwt verify middleware
@@ -28,6 +30,7 @@ const getTodo = async (req, res) => {
   }
 };
 
+// updating todos
 const updateTodo = async (req, res) => {
   try {
     const todo = await TODO.findById(req.params.id);
@@ -71,6 +74,8 @@ const deleteTodo = async (req, res) => {
     if (!user) {
       return res.status(401).json({ message: "User does not exists" });
     }
+
+    // checking user id from todoModel with user id from user model
 
     if (todo.user.toString() !== user.id) {
       return res.status(401).json({ message: "User n0t authorized" });
