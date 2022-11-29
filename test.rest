@@ -1,0 +1,9 @@
+GET http://localhost:4500/rest/todos
+
+###
+PUT http://localhost:4500/rest/todos/6384ada0d65745601baa4
+Content-Type: application/json
+
+{
+    "todo": "code"
+}
