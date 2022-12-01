@@ -1,21 +1,20 @@
 const express = require("express");
+const cluster = require("cluster");
+const totalCpus = require("os").cpus().length;
 require("dotenv").config();
 const connectDatabase = require("./database/dbConnect");
-const cluster = require("cluster");
-const totalcpus = require("os").cpus();
 
 if (cluster.isMaster) {
-  console.log(`Number of cups are ${totalcpus}`);
+  console.log(`Number of CPUs are ${totalCpus}`);
   console.log(`Master ${process.pid} is running`);
 
-  // create worker thread
-  for (let i; i < totalcpus; i++) {
-    cluster.fork(); // if there is four cores...it will create four worker thread
+  // Create worker threads
+  for (let i = 0; i < totalCpus; i++) {
+    cluster.fork();
   }
-
-  // if worker thread die..generate new worker thread automatically
   cluster.on("exit", (worker, code, signal) => {
     console.log(`Worker ${worker.process.pid} died`);
+    console.log(`Let fork another worker`);
     cluster.fork();
   });
 } else {
