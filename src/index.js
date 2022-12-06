@@ -1,7 +1,9 @@
 const express = require("express");
+
 const cluster = require("cluster");
 const totalCpus = require("os").cpus().length;
 require("dotenv").config();
+const cors = require("cors")
 const connectDatabase = require("./database/dbConnect");
 
 if (cluster.isMaster) {
@@ -18,8 +20,14 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
+  
   const PORT = process.env.PORT || 4500;
+
+
   const app = express();
+  app.use(cors({
+    origin:"http://localhost:3000"
+  }))
 
   // build in middleware for json data
   app.use(express.json());
